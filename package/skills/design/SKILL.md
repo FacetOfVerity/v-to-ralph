@@ -394,6 +394,8 @@ Create `docs/arch/IMPLEMENTATION_PLAN.md`:
 ```markdown
 # [Project Name] Implementation Plan
 
+**Role**: Persistent memory for Ralph Loop. Progress tracked here survives across sessions.
+
 Tasks with traceability to [Acceptance Criteria](./ARCHITECTURE.md#acceptance-criteria).
 
 ## Overview
@@ -448,12 +450,14 @@ Tasks with traceability to [Acceptance Criteria](./ARCHITECTURE.md#acceptance-cr
 
 | Acceptance Criterion | Task(s) | Status |
 |---------------------|---------|--------|
-| [FEATURE-CODE]-AC1 | Task 2.1 | [ ] |
-| [FEATURE-CODE]-AC2 | Task 2.1 | [ ] |
-| [FEATURE-CODE]-AC3 | Task 2.2 | [ ] |
-| [FEATURE-CODE]-AC4 | Task 2.3 | [ ] |
-| [FEATURE-CODE-2]-AC1 | Task 3.1 | [ ] |
-| [FEATURE-CODE-2]-AC2 | Task 3.2 | [ ] |
+| [FEATURE-CODE]-AC1 | Task 2.1 | |
+| [FEATURE-CODE]-AC2 | Task 2.1 | |
+| [FEATURE-CODE]-AC3 | Task 2.2 | |
+| [FEATURE-CODE]-AC4 | Task 2.3 | |
+| [FEATURE-CODE-2]-AC1 | Task 3.1 | |
+| [FEATURE-CODE-2]-AC2 | Task 3.2 | |
+
+**Status values**: ` ` → `In Progress` → `Implemented` → `Tested`
 
 **Coverage**: All acceptance criteria have implementing tasks.
 ```

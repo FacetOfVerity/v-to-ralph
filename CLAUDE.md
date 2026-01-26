@@ -92,10 +92,12 @@ When skills run, they create:
 docs/arch/
 ├── ARCHITECTURE.md        # /design: Vision, Boundaries, Ubiquitous Language, Design, Criteria
 ├── DIAGRAMS.md            # /design: Sequence diagrams (happy path + complex)
-├── IMPLEMENTATION_PLAN.md # /design: Tasks with traceability
+├── IMPLEMENTATION_PLAN.md # /design: Persistent memory — tasks, progress, traceability
 ├── INDEX.md               # /design: Navigation index
 └── RALPH_PROMPT.md        # /implement: Execution instructions
 ```
+
+**IMPLEMENTATION_PLAN.md as memory**: Ralph Loop reads this file to find where it left off and updates it after each task. The Traceability Matrix tracks status (` ` → `In Progress` → `Implemented` → `Tested`) for each acceptance criterion.
 
 ## Development Notes
 

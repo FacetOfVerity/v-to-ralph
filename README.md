@@ -96,7 +96,7 @@ graph TD
 |------|---------|
 | `ARCHITECTURE.md` | Vision, boundaries, ubiquitous language, system design, acceptance criteria |
 | `DIAGRAMS.md` | Sequence diagrams (happy path + complex scenarios) |
-| `IMPLEMENTATION_PLAN.md` | Phased tasks with traceability to criteria |
+| `IMPLEMENTATION_PLAN.md` | Persistent memory — phased tasks, progress tracking |
 | `INDEX.md` | Navigation, tasks-to-criteria mapping |
 | `RALPH_PROMPT.md` | Stack-specific GS-TDD execution instructions |
 

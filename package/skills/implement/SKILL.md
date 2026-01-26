@@ -58,11 +58,16 @@ Implement [Project Name] using GS-TDD. All acceptance criteria must pass.
 
 ```
 docs/arch/
-├── INDEX.md              # START HERE - task navigation
-├── ARCHITECTURE.md       # Criteria, modules, ubiquitous language
-├── DIAGRAMS.md           # Sequence diagrams for complex flows
-└── IMPLEMENTATION_PLAN.md # Tasks with checkboxes (mark progress here)
+├── INDEX.md               # START HERE - task navigation
+├── ARCHITECTURE.md        # Criteria, modules, ubiquitous language
+├── DIAGRAMS.md            # Sequence diagrams for complex flows
+└── IMPLEMENTATION_PLAN.md # MEMORY - progress persists here
 ```
+
+**IMPLEMENTATION_PLAN.md is your persistent memory:**
+- On start: Read to find where you left off
+- On task complete: Mark `[x]` and update Traceability Matrix status
+- Status flow: ` ` → `In Progress` → `Implemented` → `Tested`
 
 ## Rules
 
@@ -70,21 +75,23 @@ docs/arch/
 2. **GS-TDD** — Comprehensive tests BEFORE code
 3. **Verify** — `[build_cmd] && [test_cmd]` after every change
 4. **Commit** — After each completed task
-5. **Track** — Mark `[x]` in IMPLEMENTATION_PLAN.md
+5. **Update memory** — Mark `[x]` in tasks, update Status in Traceability Matrix
 
 ## Workflow
 
 ```
-1. Read docs/arch/INDEX.md — find next unchecked task
-2. Read task's acceptance criteria in ARCHITECTURE.md
-3. If complex flow → check DIAGRAMS.md for sequence diagram
-4. Write comprehensive failing tests (RED)
-5. Implement production-ready code (GOLD)
-6. [build_cmd] && [test_cmd]
-7. [format_cmd]
-8. git add -A && git commit -m "feat: [task description]"
-9. Mark [x] in IMPLEMENTATION_PLAN.md
-10. Repeat until all tasks complete
+1. Read docs/arch/IMPLEMENTATION_PLAN.md — find next unchecked task
+2. Set task's criterion Status=`In Progress` in Traceability Matrix
+3. Read task's acceptance criteria in ARCHITECTURE.md
+4. If complex flow → check DIAGRAMS.md for sequence diagram
+5. Write comprehensive failing tests (RED)
+6. Implement production-ready code (GOLD)
+7. [build_cmd] && [test_cmd]
+8. [format_cmd]
+9. git add -A && git commit -m "feat: [task description]"
+10. Mark [x] in IMPLEMENTATION_PLAN.md, set Status=`Implemented`
+11. Run tests, if pass → set Status=`Tested`
+12. Repeat until all tasks complete
 ```
 
 ## GS-TDD: Red → Gold → Refactor
