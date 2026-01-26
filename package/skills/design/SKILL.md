@@ -74,6 +74,8 @@ Before asking questions, explore the current project to understand what we're bu
      - [Detected language] (match project language)
    ```
 
+   **Terminology rule**: Regardless of chosen documentation language, established industry terms MUST remain in English: Ubiquitous Language, Bounded Context, Aggregate Root, Entity, Value Object, Repository, Acceptance Criteria, Given/When/Then, Happy Path, etc.
+
 ### Step 1: Gather Context
 
 Before generating architecture, use `AskUserQuestion` to clarify:
@@ -279,20 +281,6 @@ AND [additional observable outcome]
 
 **[FEATURE-CODE-2]-AC1**: ...
 
-## Key Interfaces
-
-Define critical interfaces. Use Ubiquitous Language for naming.
-
-**Note**: Interfaces *should* reference internal modules — unlike Gherkin which must remain implementation-agnostic. Interfaces provide the "HOW" that implements the "WHAT" from acceptance criteria.
-
-```[language]
-// [ModuleName1] - [brief purpose]
-interface/class/struct [Name] {
-    [method]([params]) -> [return]  // [FEATURE-CODE]-AC1
-    [method]([params]) -> [return]  // [FEATURE-CODE]-AC2
-}
-```
-```
 
 ### Step 4: Generate DIAGRAMS.md
 

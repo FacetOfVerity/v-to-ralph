@@ -1,5 +1,7 @@
 # CLAUDE.md
 
+**Note**: All project documentation is maintained in English.
+
 ## Philosophy
 
 **Problem**: AI agents lose context across iterations. They write code that passes immediate tests but breaks existing functionality. Without persistent memory, each iteration starts almost from scratch.
