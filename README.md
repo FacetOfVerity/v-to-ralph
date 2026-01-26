@@ -155,20 +155,15 @@ TODO describe
 
 ```
 v-to-ralph/
-├── .claude-plugin/
-│   └── marketplace.json        # → ./package
 ├── package/
-│   ├── plugin.json             # Plugin manifest
-│   ├── commands/
-│   │   ├── design.md           # /design → skill: vtr-architect
-│   │   └── implement.md        # /implement → skill: vtr-ralph-loop-builder
+│   ├── plugin.json                   # Plugin manifest
 │   └── skills/
-│       ├── vtr-architect/
-│       │   └── SKILL.md        # Architecture generation logic
-│       └── vtr-ralph-loop-builder/
-│           └── SKILL.md        # Ralph Loop setup logic
-├── CLAUDE.md                   # AI agent instructions
-└── README.md
+│       ├── design/
+│       │   └── SKILL.md              # /design implementation
+│       └── implement/
+│           └── SKILL.md              # /implement implementation
+├── README.md
+└── CLAUDE.md
 ```
 
 ## Requirements

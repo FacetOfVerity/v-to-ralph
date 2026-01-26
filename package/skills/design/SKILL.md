@@ -370,21 +370,93 @@ sequenceDiagram
     ...
 ```
 
-## State Diagrams (if applicable)
+## Class Diagrams (if applicable)
 
-### [Entity] Lifecycle
+Include class diagrams when the domain has:
+- Multiple related entities with distinct properties
+- Complex relationships (ownership, containment, associations)
+- Aggregate boundaries that need visualization
+
+### Domain Model
+
+Use Ubiquitous Language terms from [ARCHITECTURE.md](./ARCHITECTURE.md#ubiquitous-language).
 
 ```mermaid
-stateDiagram-v2
-    [*] --> Created
-    Created --> Active: activate
-    Active --> Paused: pause
-    Paused --> Active: resume
-    Active --> Completed: complete
-    Paused --> Cancelled: cancel
-    Completed --> [*]
-    Cancelled --> [*]
+classDiagram
+    class Order {
+        <<Aggregate Root>>
+        +String id
+        +DateTime createdAt
+        +OrderStatus status
+        +Money total
+        +addItem(Product, quantity)
+        +submit()
+        +cancel()
+    }
+
+    class LineItem {
+        <<Entity>>
+        +String productId
+        +String productName
+        +int quantity
+        +Money unitPrice
+        +Money subtotal
+    }
+
+    class Money {
+        <<Value Object>>
+        +Decimal amount
+        +String currency
+        +add(Money) Money
+        +multiply(int) Money
+    }
+
+    class Customer {
+        <<Aggregate Root>>
+        +String id
+        +String email
+        +Address shippingAddress
+    }
+
+    class Address {
+        <<Value Object>>
+        +String street
+        +String city
+        +String postalCode
+        +String country
+    }
+
+    Customer "1" --> "*" Order : places
+    Order "1" *-- "1..*" LineItem : contains
+    LineItem --> "1" Money : unitPrice
+    Order --> "1" Money : total
+    Customer *-- "1" Address : shippingAddress
 ```
+
+### Class Diagram Guidelines
+
+**When to include**:
+- Domain has 3+ entities with relationships
+- Aggregate boundaries need clarification
+- Value objects vs entities distinction matters
+
+**Annotations** (from DDD):
+- `<<Aggregate Root>>` - Entry point to aggregate, owns consistency boundary
+- `<<Entity>>` - Has identity, lifecycle within aggregate
+- `<<Value Object>>` - Immutable, defined by attributes, no identity
+- `<<Repository>>` - Persistence abstraction for aggregates
+- `<<Service>>` - Stateless domain operations
+
+**Relationship types**:
+- `*--` Composition: Child cannot exist without parent (Order *-- LineItem)
+- `o--` Aggregation: Child can exist independently (Department o-- Employee)
+- `-->` Association: Knows about, references (Customer --> Order)
+
+**Multiplicity notation**:
+- `"1"` - Exactly one
+- `"0..1"` - Zero or one (optional)
+- `"*"` or `"0..*"` - Zero or more
+- `"1..*"` - One or more (at least one)
 ```
 
 ### Step 5: Generate IMPLEMENTATION_PLAN.md
@@ -525,7 +597,7 @@ Created:
 Summary:
 - [N] domain terms in Ubiquitous Language
 - [M] modules defined
-- [K] sequence diagrams (happy path + complex)
+- [K] sequence diagrams (happy path + complex) + class diagrams (if applicable)
 - [P] acceptance criteria
 - [T] implementation tasks
 - Traceability: 100% criteria covered
@@ -597,7 +669,3 @@ Every task should trace to at least one acceptance criterion.
 Every acceptance criterion should be covered by at least one task.
 
 No orphan tasks. No uncovered criteria.
-
-## Example Output
-
-See `examples/` folder for complete architecture documents.

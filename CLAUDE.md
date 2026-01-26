@@ -72,6 +72,12 @@ Rule: Gherkin describes business behavior (WHAT), not implementation (HOW).
 - Happy path: typical successful flows
 - Complex scenarios: error handling, retries, edge cases
 
+### Class Diagrams
+
+- Domain entities with properties and types
+- Relationships with multiplicity
+- DDD annotations (Aggregate Root, Entity, Value Object)
+
 ### Traceability
 
 Tasks reference criteria: `Covers: AUTH-AC1, AUTH-AC2`
@@ -91,7 +97,7 @@ When skills run, they create:
 ```
 docs/arch/
 ├── ARCHITECTURE.md        # /design: Vision, Boundaries, Ubiquitous Language, Design, Criteria
-├── DIAGRAMS.md            # /design: Sequence diagrams (happy path + complex)
+├── DIAGRAMS.md            # /design: Sequence + Class diagrams
 ├── IMPLEMENTATION_PLAN.md # /design: Persistent memory — tasks, progress, traceability
 ├── INDEX.md               # /design: Navigation index
 └── RALPH_PROMPT.md        # /implement: Execution instructions
