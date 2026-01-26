@@ -1,0 +1,15 @@
+{
+  "name": "v-to-ralph",
+  "version": "1.0.0",
+  "description": "V-Model implementation pipeline: architect systems with BDD acceptance criteria, then execute via Ralph Loop with GS-TDD",
+  "author": {
+    "name": "Vladislav"
+  },
+  "license": "MIT",
+  "keywords": ["v-model", "bdd", "tdd", "architecture", "ralph-loop"],
+  "skills": [
+    "./skills/design",
+    "./skills/implement"
+  ],
+  "repository": "https://github.com/FacetOfVerity/v-to-ralph"
+}
