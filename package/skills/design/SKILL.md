@@ -246,8 +246,12 @@ Define core domain terms. This vocabulary must be used consistently across all d
 
 ### Data Flow
 
-```
-[Input] → [Module1] → [Module2] → [Module3] → [Output]
+```mermaid
+flowchart LR
+    Input[Input] --> M1[Module1]
+    M1 --> M2[Module2]
+    M2 --> M3[Module3]
+    M3 --> Output[Output]
 ```
 
 ## Acceptance Criteria
@@ -266,9 +270,9 @@ THEN [expected outcome]
 **[FEATURE-CODE]-AC2**: [Another criterion]
 ```
 GIVEN [context]
-WHEN [action]
-THEN [Module1] [expected behavior]
-AND [additional expectation]
+WHEN [actor performs action]
+THEN [observable outcome - passive voice]
+AND [additional observable outcome]
 ```
 
 ### [FEATURE-CODE-2]: [Another Feature]
@@ -278,6 +282,8 @@ AND [additional expectation]
 ## Key Interfaces
 
 Define critical interfaces. Use Ubiquitous Language for naming.
+
+**Note**: Interfaces *should* reference internal modules — unlike Gherkin which must remain implementation-agnostic. Interfaces provide the "HOW" that implements the "WHAT" from acceptance criteria.
 
 ```[language]
 // [ModuleName1] - [brief purpose]
@@ -289,6 +295,8 @@ interface/class/struct [Name] {
 ```
 
 ### Step 4: Generate DIAGRAMS.md
+
+**IMPORTANT**: All diagrams MUST use Mermaid format. Never use ASCII art, PlantUML, or other diagram formats.
 
 Create `docs/arch/DIAGRAMS.md` with sequence diagrams:
 
@@ -523,24 +531,54 @@ Next step: Run /implement to generate Ralph Loop setup
 
 ## Guidelines
 
+### BDD Rules for Acceptance Criteria
+
+**Strict Rules** (numbered for LLM compliance):
+
+1. **No Implementation Leaks**: Never mention internal service/module names in Gherkin (WorldService, StateRepository, Kafka). Use domain roles (System, Platform) or passive voice.
+
+2. **Passive THEN Clauses**: THEN must describe observable state/outcome, not action.
+   - BAD: "THEN the Service saves the data" (active/procedural)
+   - GOOD: "THEN the data is persisted" (passive/state)
+   - GOOD: "THEN the user receives confirmation" (observable)
+
+3. **Atomic WHEN**: Single trigger action per scenario.
+
+4. **Ubiquitous Language Only**: Use domain terms, not technical terms.
+
+**Two-Layer Architecture**:
+- **Gherkin** = Contract for Business (WHAT we do)
+- **Interfaces** = Contract for Developers (HOW we do it)
+- Connected via glue code (test step implementations), not via text
+
 ### Acceptance Criteria Quality
 
 Good criteria are:
 - **Testable**: Can write a test that passes/fails
-- **Specific**: Names the module responsible
+- **Outcome-focused**: Describes observable results, not internal actions
 - **Independent**: Each criterion stands alone
 - **Valuable**: Ties to user-visible behavior
 
-Bad:
+**BAD** (vague):
 ```
 System should be fast
 ```
 
-Good:
+**BAD** (implementation leak):
 ```
 GIVEN a search query
 WHEN user submits search
-THEN SearchModule returns results within 200ms
+THEN SearchModule calls CacheService
+AND CacheService returns results
+AND SearchModule formats response within 200ms
+```
+
+**GOOD** (outcome-focused):
+```
+GIVEN a catalog with 10,000 products
+WHEN user searches for "laptop"
+THEN search results appear within 200ms
+AND results contain matching products
 ```
 
 ### Module Granularity
