@@ -110,13 +110,21 @@ Q4 - "Test Framework": Which test framework? (default shown based on stack)
   - .NET: `xUnit` (Recommended)
   - .NET: `NUnit`
 
-Q5 - "Integration Tests": How should integration tests run?
+Q5 - "Test Types": Which test types to implement?
+  Options:
+  - Integration tests only (Recommended for new projects - testcontainers)
+  - Unit + Integration tests
+  - Unit tests only
+  - Unit + Integration + E2E tests
+  (multiSelect: false)
+
+Q6 - "Integration Tests": How should integration tests run?
   Options:
   - Testcontainers (Recommended - per-test isolation, CI-friendly)
   - Docker Compose scripts (for complex multi-service setups)
-  - No integration tests (unit tests only)
+  Note: Only shown if Q5 includes integration tests
 
-Q6 - "External Services": Does this project need external services for testing?
+Q7 - "External Services": Does this project need external services for testing?
   Options:
   - Yes, database (PostgreSQL, MySQL, etc.)
   - Yes, cache (Redis, Memcached)
@@ -130,14 +138,14 @@ Q6 - "External Services": Does this project need external services for testing?
 
 If Q3 = "Yes, research first", ask separately:
 ```
-Q7 - "Search Tool": Which search tool to use?
+Q8 - "Search Tool": Which search tool to use?
   Options: [List available search tools from MCP servers or built-in WebSearch]
 ```
 
 **Third question block** (always ask):
 
 ```
-Q8 - "Constraints": Any specific constraints?
+Q9 - "Constraints": Any specific constraints?
   Description: "Performance requirements, integrations, compliance, existing systems..."
   (free text input)
 ```
