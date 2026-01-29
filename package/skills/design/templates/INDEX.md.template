@@ -1,0 +1,42 @@
+# Architecture Index
+
+Quick reference for navigating architecture documents.
+
+## Files
+
+| File | Purpose | When to Read |
+|------|---------|--------------|
+| [ARCHITECTURE.md](./ARCHITECTURE.md) | Design & acceptance criteria | Current task's criteria |
+| [DIAGRAMS.md](./DIAGRAMS.md) | Sequence diagrams | Understanding complex flows |
+| [IMPLEMENTATION_PLAN.md](./IMPLEMENTATION_PLAN.md) | Task checklist | Finding next task, marking done |
+
+## Domain Terms
+
+Quick reference from [Ubiquitous Language](./ARCHITECTURE.md#ubiquitous-language):
+
+| Term | Definition |
+|------|------------|
+| **[Term1]** | [One-line definition] |
+| **[Term2]** | [One-line definition] |
+
+## Modules
+
+| Module | Purpose |
+|--------|---------|
+| [Module1] | [Brief] |
+| [Module2] | [Brief] |
+
+## Tasks to Criteria Mapping
+
+| Task | Covers | Related Diagrams |
+|------|--------|------------------|
+| Task 1.1 | Infrastructure | - |
+| Task 2.1 | [CODE]-AC1, AC2 | [CODE]-HP1 |
+| Task 2.2 | [CODE]-AC3 | [CODE]-CS1 |
+
+## Progress
+
+- **Total Tasks**: [T]
+- **Completed**: 0
+- **Acceptance Criteria**: [P]
+- **Covered**: [P] (100%)

@@ -1,0 +1,131 @@
+# [Project Name] Diagrams
+
+Sequence diagrams for key scenarios. Refer to [Ubiquitous Language](./ARCHITECTURE.md#ubiquitous-language) for term definitions.
+
+## Happy Path Scenarios
+
+### [FEATURE-CODE]-HP1: [Scenario Name]
+
+[Brief description of this typical successful flow]
+
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant M1 as [Module1]
+    participant M2 as [Module2]
+    participant DB as Database
+
+    U->>M1: [action with domain terms]
+    M1->>M2: [internal call]
+    M2->>DB: [data operation]
+    DB-->>M2: [result]
+    M2-->>M1: [processed result]
+    M1-->>U: [response]
+```
+
+### [FEATURE-CODE]-HP2: [Another Happy Path]
+
+```mermaid
+sequenceDiagram
+    ...
+```
+
+## Complex Scenarios
+
+### [FEATURE-CODE]-CS1: [Complex Scenario Name]
+
+[Description: error handling, retry logic, concurrent access, etc.]
+
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant M1 as [Module1]
+    participant M2 as [Module2]
+    participant Ext as External Service
+
+    U->>M1: [action]
+    M1->>Ext: [external call]
+    Ext-->>M1: [error/timeout]
+
+    alt Retry Logic
+        M1->>Ext: [retry]
+        Ext-->>M1: [success]
+    else Fallback
+        M1->>M2: [fallback action]
+        M2-->>M1: [fallback result]
+    end
+
+    M1-->>U: [final response]
+```
+
+### [FEATURE-CODE]-CS2: [Another Complex Scenario]
+
+[Description: race condition handling, transaction rollback, etc.]
+
+```mermaid
+sequenceDiagram
+    ...
+```
+
+## Class Diagrams (if applicable)
+
+Include class diagrams when the domain has:
+- Multiple related entities with distinct properties
+- Complex relationships (ownership, containment, associations)
+- Aggregate boundaries that need visualization
+
+### Domain Model
+
+Use Ubiquitous Language terms from [ARCHITECTURE.md](./ARCHITECTURE.md#ubiquitous-language).
+
+```mermaid
+classDiagram
+    class Order {
+        <<Aggregate Root>>
+        +String id
+        +DateTime createdAt
+        +OrderStatus status
+        +Money total
+        +addItem(Product, quantity)
+        +submit()
+        +cancel()
+    }
+
+    class LineItem {
+        <<Entity>>
+        +String productId
+        +String productName
+        +int quantity
+        +Money unitPrice
+        +Money subtotal
+    }
+
+    class Money {
+        <<Value Object>>
+        +Decimal amount
+        +String currency
+        +add(Money) Money
+        +multiply(int) Money
+    }
+
+    class Customer {
+        <<Aggregate Root>>
+        +String id
+        +String email
+        +Address shippingAddress
+    }
+
+    class Address {
+        <<Value Object>>
+        +String street
+        +String city
+        +String postalCode
+        +String country
+    }
+
+    Customer "1" --> "*" Order : places
+    Order "1" *-- "1..*" LineItem : contains
+    LineItem --> "1" Money : unitPrice
+    Order --> "1" Money : total
+    Customer *-- "1" Address : shippingAddress
+```

@@ -1,0 +1,84 @@
+# [Project Name] Architecture
+
+## Vision
+
+[2-3 sentences: What we're building, why it matters, what success looks like]
+
+## Boundaries
+
+### Building
+- [Feature/capability 1]
+- [Feature/capability 2]
+- [Integration 1]
+
+### Not Building
+- [Explicitly excluded feature 1]
+- [Explicitly excluded scope 2]
+
+### Constraints
+- [Technical constraint 1]
+- [Performance requirement]
+- [Compliance/security requirement]
+- [Integration constraint]
+
+## Ubiquitous Language
+
+Define core domain terms. This vocabulary must be used consistently across all documents, code, and communication.
+
+| Term | Definition | Example |
+|------|------------|---------|
+| **[Entity1]** | [Clear definition of this domain concept] | [Concrete example] |
+| **[Entity2]** | [Clear definition] | [Example] |
+| **[Action/Event]** | [What this means in our domain] | [Example] |
+| **[State]** | [Definition of this state/status] | [When it occurs] |
+
+### Relationships
+
+- [Entity1] contains one or more [Entity2]
+- [Entity2] can transition to [State] when [condition]
+- [Action] is performed by [Actor] on [Entity1]
+
+## System Design
+
+### Components
+
+| Module | Purpose |
+|--------|---------|
+| **[ModuleName1]** | [Single responsibility - what it does] |
+| **[ModuleName2]** | [Single responsibility - what it does] |
+| **[ModuleName3]** | [Single responsibility - what it does] |
+
+### Data Flow
+
+```mermaid
+flowchart LR
+    Input[Input] --> M1[Module1]
+    M1 --> M2[Module2]
+    M2 --> M3[Module3]
+    M3 --> Output[Output]
+```
+
+## Acceptance Criteria
+
+Use BDD-style format. Group by feature area. Use terms from Ubiquitous Language.
+
+### [FEATURE-CODE]: [Feature Name]
+
+**[FEATURE-CODE]-AC1**: [Criterion title]
+```
+GIVEN [initial context using domain terms]
+WHEN [action performed]
+THEN [expected outcome]
+```
+
+**[FEATURE-CODE]-AC2**: [Another criterion]
+```
+GIVEN [context]
+WHEN [actor performs action]
+THEN [observable outcome - passive voice]
+AND [additional observable outcome]
+```
+
+### [FEATURE-CODE-2]: [Another Feature]
+
+**[FEATURE-CODE-2]-AC1**: ...

@@ -45,7 +45,12 @@ v-to-ralph/
 │   ├── plugin.json                   # Plugin manifest
 │   └── skills/
 │       ├── design/
-│       │   └── SKILL.md              # /design implementation
+│       │   ├── SKILL.md              # /design implementation
+│       │   └── templates/            # Output file templates
+│       │       ├── ARCHITECTURE.md.template
+│       │       ├── DIAGRAMS.md.template
+│       │       ├── IMPLEMENTATION_PLAN.md.template
+│       │       └── INDEX.md.template
 │       └── implement/
 │           └── SKILL.md              # /implement implementation
 ├── README.md

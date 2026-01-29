@@ -1,0 +1,66 @@
+# [Project Name] Implementation Plan
+
+**Role**: Persistent memory for Ralph Loop. Progress tracked here survives across sessions.
+
+Tasks with traceability to [Acceptance Criteria](./ARCHITECTURE.md#acceptance-criteria).
+
+## Overview
+
+| Phase | Tasks | Criteria Covered |
+|-------|-------|------------------|
+| 1. Foundation | 2 | Setup |
+| 2. Core | 3 | [FEATURE-CODE]-AC1..AC4 |
+| 3. Integration | 2 | [FEATURE-CODE-2]-AC1..AC2 |
+| **Total** | **7** | **All criteria** |
+
+## Phase 1: Foundation
+
+- [ ] **Task 1.1**: [Setup description]
+  - [ ] Subtask: Initialize project structure
+  - [ ] Subtask: Configure build tools
+  - [ ] Subtask: Setup test infrastructure
+  - Covers: Infrastructure (no AC)
+
+- [ ] **Task 1.2**: [Another setup task]
+  - [ ] Subtask details
+  - Covers: Infrastructure
+
+## Phase 2: Core Features
+
+- [ ] **Task 2.1**: [Feature implementation]
+  - [ ] Subtask: Implement [Module1] interface
+  - [ ] Subtask: Add validation logic
+  - [ ] Subtask: Write integration tests
+  - Covers: [FEATURE-CODE]-AC1, [FEATURE-CODE]-AC2
+
+- [ ] **Task 2.2**: [Another feature]
+  - [ ] Subtask details
+  - Covers: [FEATURE-CODE]-AC3
+
+- [ ] **Task 2.3**: [Feature completion]
+  - [ ] Subtask details
+  - Covers: [FEATURE-CODE]-AC4
+
+## Phase 3: Integration
+
+- [ ] **Task 3.1**: [Integration task]
+  - [ ] Subtask: Connect modules
+  - [ ] Subtask: End-to-end testing
+  - Covers: [FEATURE-CODE-2]-AC1
+
+- [ ] **Task 3.2**: [Final integration]
+  - [ ] Subtask details
+  - Covers: [FEATURE-CODE-2]-AC2
+
+## Traceability Matrix
+
+| Acceptance Criterion | Task(s) |
+|---------------------|---------|
+| [FEATURE-CODE]-AC1 | Task 2.1 |
+| [FEATURE-CODE]-AC2 | Task 2.1 |
+| [FEATURE-CODE]-AC3 | Task 2.2 |
+| [FEATURE-CODE]-AC4 | Task 2.3 |
+| [FEATURE-CODE-2]-AC1 | Task 3.1 |
+| [FEATURE-CODE-2]-AC2 | Task 3.2 |
+
+**Coverage**: All acceptance criteria have implementing tasks.
