@@ -8,6 +8,26 @@ user-invocable: true
 
 Design system architecture using V-Model principles with BDD-style acceptance criteria.
 
+## V-Model Overview
+
+```mermaid
+graph LR
+    subgraph "Left Branch (Human Design)"
+        A[Vision] --> B[Architecture]
+        B --> C[Acceptance Criteria]
+    end
+    subgraph "Bridge"
+        C --> D[Test Specs]
+    end
+    subgraph "Right Branch (Machine Verification)"
+        D --> E[Tests RED]
+        E --> F[Code GOLD]
+    end
+```
+
+This skill implements the **Left Branch** — from Vision to Test Specs.
+The `/implement` skill bridges to the **Right Branch** via GS-TDD.
+
 ## When to Use
 
 Use this skill when starting a new feature or project that needs:
@@ -73,9 +93,27 @@ Read templates before generating files.
 
 ### Step 1: Gather Requirements
 
-Use `AskUserQuestion` to gather all needed information. Ask questions in logical groups.
+Use `AskUserQuestion` to gather all needed information. Questions are organized in blocks with checkpoints.
 
-**First question block** (always ask):
+## Stack-Framework Compatibility
+
+Use this matrix to validate Q4 options based on Q1 selection:
+
+| Stack | Valid Test Frameworks | Default |
+|-------|----------------------|---------|
+| Go | go test, testify | go test + testify |
+| Rust | cargo test | cargo test |
+| Python | pytest, unittest | pytest |
+| TypeScript/Node | Jest, Vitest, Mocha | Vitest |
+| Java | JUnit 5, TestNG | JUnit 5 |
+| Kotlin | JUnit 5, Kotest | Kotest |
+| .NET | xUnit, NUnit | xUnit |
+
+**Note**: Q4 options are filtered based on Q1 selection.
+
+---
+
+**Block A: Core Decisions** (Q1-Q4)
 
 ```
 Q1 - "Stack": Which technology stack?
@@ -110,6 +148,30 @@ Q4 - "Test Framework": Which test framework? (default shown based on stack)
   - .NET: `xUnit` (Recommended)
   - .NET: `NUnit`
 
+**Checkpoint A**: After Q1-Q4, display summary and ask:
+
+```
+Current choices:
+- Stack: {Q1 answer}
+- Docs Language: {Q2 answer}
+- Research: {Q3 answer}
+- Test Framework: {Q4 answer}
+
+Review your choices. Want to change anything?
+Options:
+- Continue (Recommended)
+- Change Stack
+- Change Docs Language
+- Change Research
+- Change Test Framework
+```
+
+If user selects a change option, re-ask that specific question then return to checkpoint.
+
+---
+
+**Block B: Test Configuration** (Q5-Q7)
+
 Q5 - "Test Types": Which test types to implement?
   Options:
   - Integration tests only (Recommended for new projects - testcontainers)
@@ -132,7 +194,26 @@ Q7 - "External Services": Does this project need external services for testing?
   - Yes, multiple services (will ask details)
   - No external services needed
   (multiSelect: true)
+
+**Checkpoint B**: After Q5-Q7, display summary and ask:
+
 ```
+Test configuration:
+- Test Types: {Q5 answer}
+- Integration Approach: {Q6 answer or "N/A"}
+- External Services: {Q7 answer}
+
+Review your choices. Want to change anything?
+Options:
+- Continue (Recommended)
+- Change Test Types
+- Change Integration Approach
+- Change External Services
+```
+
+If user selects a change option, re-ask that specific question then return to checkpoint.
+
+---
 
 **Second question block** (conditional):
 
@@ -176,12 +257,19 @@ Q - "Existing Files": Architecture files already exist in docs/arch/. How to pro
 
 If user requested research, use available search tools to gather information.
 
+**Research Fallback Strategy**: If search returns no useful results:
+1. Try alternative search tool (e.g., context7-mcp for documentation)
+2. If still empty: use stack defaults from Stack-Framework Compatibility matrix
+3. Notify user: "Using default conventions for {stack}. You can customize in Step 5."
+
 #### 2.1 Framework Discovery
 
 Search for modern frameworks for the selected stack:
 - Best frameworks and libraries
 - Project structure conventions
 - Community recommendations
+
+**Fallback**: Use defaults from Stack-Framework Compatibility table.
 
 #### 2.2 Best Practices Discovery
 
@@ -190,6 +278,8 @@ Search for implementation patterns:
 - Testing strategies
 - Configuration management
 - Security best practices
+
+**Fallback**: Use standard patterns for the stack (documented in step 2.5).
 
 #### 2.3 Domain-Specific Research (if applicable)
 
@@ -282,6 +372,33 @@ Add **Research Summary** section to ARCHITECTURE.md (after Vision, before Bounda
 - [URL 2] - [What was useful]
 ```
 
+#### 2.7 Preview Output Structure
+
+Before generating files, show user preview:
+
+```
+Files to be created in docs/arch/:
+
+| File | Contents |
+|------|----------|
+| ARCHITECTURE.md | Vision, {N} modules, {M} acceptance criteria |
+| DIAGRAMS.md | {X} sequence diagrams, {Y} class diagrams |
+| IMPLEMENTATION_PLAN.md | {T} tasks across {P} phases |
+| INDEX.md | Quick navigation index |
+| TESTS.md | Test specs for {M} criteria |
+| PROJECT_STRUCTURE.md | Directory layout for {stack} |
+| INFRASTRUCTURE.md | Docker config for {services} | (if applicable)
+
+Estimated acceptance criteria: {M}
+
+Proceed with generation?
+Options:
+- Generate files (Recommended)
+- Adjust scope first
+```
+
+If user selects "Adjust scope first", ask what to change and loop back.
+
 ### Step 3: Generate Architecture Files
 
 Read templates from `{CLAUDE_PLUGIN_ROOT}/skills/design/templates/` then create files in `docs/arch/`:
@@ -340,7 +457,13 @@ Before presenting to user, verify quality:
 - [ ] Connection strings documented
 - [ ] Startup/shutdown commands complete and correct
 
+**Placeholder check:**
+- [ ] Scan all generated files for unreplaced placeholders matching `{[a-z_]+}`
+- [ ] If found: list all unreplaced placeholders, ask user to provide values, replace and re-validate
+
 If issues found, fix them before proceeding.
+
+See [validation-rules.md](./validation-rules.md) for detailed BDD and traceability rules.
 
 ### Step 5: Review
 
@@ -394,9 +517,11 @@ Next step: Run /implement to start Ralph Loop
 
 ## Guidelines
 
+> **Note**: Detailed validation rules are in [validation-rules.md](./validation-rules.md).
+
 ### BDD Rules for Acceptance Criteria
 
-**Strict Rules**:
+**Strict Rules** (see validation-rules.md for full details):
 
 1. **No Implementation Leaks**: Never mention internal service/module names in Gherkin. Use domain roles or passive voice.
 

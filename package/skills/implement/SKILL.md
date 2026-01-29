@@ -24,13 +24,36 @@ Use after `/design` has created `docs/arch/ARCHITECTURE.md`.
 
 ## Execution Flow
 
-### Step 1: Verify Architecture Exists
+### Step 1: Prerequisites Check
+
+Before proceeding, verify required files exist.
+
+**Required files:**
+- `docs/arch/ARCHITECTURE.md` — contains acceptance criteria
+- `docs/arch/IMPLEMENTATION_PLAN.md` — contains task list
+- `docs/arch/TESTS.md` — contains test specifications
+
+**Optional files:**
+- `docs/arch/DIAGRAMS.md` — sequence and class diagrams
+- `docs/arch/PROJECT_STRUCTURE.md` — directory layout
+- `docs/arch/INFRASTRUCTURE.md` — Docker and service config
+- `docs/arch/INDEX.md` — navigation index
+
+**Verification:**
 
 ```bash
-ls docs/arch/ARCHITECTURE.md docs/arch/IMPLEMENTATION_PLAN.md docs/arch/INDEX.md
+# Check required files
+ls docs/arch/ARCHITECTURE.md docs/arch/IMPLEMENTATION_PLAN.md docs/arch/TESTS.md
 ```
 
-If missing, tell user to run `/design` first.
+**If any required file is missing:**
+1. List missing files to user
+2. Suggest: "Run `/design` first to generate: {missing_files}"
+3. Exit skill (do not proceed)
+
+**If optional files are missing:**
+- Continue with available files
+- Note which optional files are absent (Ralph Loop will work without them)
 
 ### Step 2: Parse Architecture Files
 

@@ -86,3 +86,44 @@ Tasks with traceability to [Acceptance Criteria](./ARCHITECTURE.md#acceptance-cr
 | [FEATURE-CODE-2]-AC2 | Task 3.2 |
 
 **Coverage**: All acceptance criteria have implementing tasks.
+
+---
+
+## Scaling Notes
+
+For large projects (20+ acceptance criteria):
+
+### Grouping by Module
+
+Create sub-sections within phases:
+- Phase 2.1: Auth Module
+- Phase 2.2: Payments Module
+- Phase 2.3: Notifications Module
+
+### Sub-Phase Notation
+
+Use decimal notation for granular tracking:
+
+| Phase | Task | Description | Covers | Blocked By | Status |
+|-------|------|-------------|--------|------------|--------|
+| 2.1.1 | Auth: Login | Implement login flow | AUTH-AC1 | 0.1 | |
+| 2.1.2 | Auth: Logout | Implement logout flow | AUTH-AC2 | 2.1.1 | |
+| 2.2.1 | Pay: Checkout | Payment processing | PAY-AC1 | 2.1.1 | |
+
+### Dependency Tracking
+
+Add "Blocked By" column when tasks have dependencies:
+
+```markdown
+- [ ] **Task 2.2.1**: Implement payment processing
+  - Blocked By: Task 2.1.1 (requires authenticated user)
+  - [ ] Subtask: Create payment service
+  - Covers: PAY-AC1
+```
+
+### Split Files Strategy
+
+For very large projects (50+ criteria), consider:
+- `IMPLEMENTATION_PLAN_AUTH.md` — Auth module tasks
+- `IMPLEMENTATION_PLAN_PAYMENTS.md` — Payment module tasks
+- `IMPLEMENTATION_PLAN.md` — Index linking to module files

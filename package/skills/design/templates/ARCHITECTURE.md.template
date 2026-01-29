@@ -52,11 +52,24 @@ Define core domain terms. This vocabulary must be used consistently across all d
 
 ```mermaid
 flowchart LR
-    Input[Input] --> M1[Module1]
-    M1 --> M2[Module2]
-    M2 --> M3[Module3]
-    M3 --> Output[Output]
+    Input[Input] --> Validation[Validation]
+    Validation --> Processing[Processing]
+    Processing --> Output[Output]
+
+    Validation -->|Invalid| ErrorHandler[Error Handler]
+    Processing -->|Failure| ErrorHandler
+    Processing -->|External Call| ExtService[External Service]
+    ExtService -->|Retry| Processing
+    ExtService -->|Failure| ErrorHandler
+    ErrorHandler --> ErrorResponse[Error Response]
 ```
+
+### Data Flow Notes
+
+- **Validation**: Input validation at system boundary
+- **Processing**: Core business logic
+- **External Service**: Integration points (DB, APIs, queues)
+- **Error Handler**: Centralized error handling and logging
 
 ## Acceptance Criteria
 
@@ -82,3 +95,24 @@ AND [additional observable outcome]
 ### [FEATURE-CODE-2]: [Another Feature]
 
 **[FEATURE-CODE-2]-AC1**: ...
+
+## Development Guidelines
+
+### Code Style
+
+- {style_preference} (e.g., "Prefer composition over inheritance")
+- {type_strictness} (e.g., "Strict TypeScript, no `any`")
+- {naming_conventions} (e.g., "camelCase for functions, PascalCase for types")
+
+### Testing Philosophy
+
+- {test_philosophy} (e.g., "Test behavior, not implementation")
+- {coverage_approach} (e.g., "Focus on critical paths, not 100% coverage")
+- {test_isolation} (e.g., "Each test must be independent")
+
+### Custom Rules
+
+{user_custom_rules}
+
+---
+*These guidelines are referenced by RALPH_PROMPT.md during implementation.*

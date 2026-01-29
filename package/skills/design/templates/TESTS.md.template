@@ -99,19 +99,22 @@ Each acceptance criterion maps to one or more test specifications.
 {test_code_example}
 ```
 
+## Status Tracking
+
+Test implementation status is tracked in [IMPLEMENTATION_PLAN.md](./IMPLEMENTATION_PLAN.md).
+
+Use the Traceability Matrix in IMPLEMENTATION_PLAN.md to track:
+- ` ` → `In Progress` → `Implemented` → `Tested`
+
 ## Acceptance Criteria Coverage Matrix
 
-| Criterion | Test File | Test Function(s) | Status |
-|-----------|-----------|------------------|--------|
-| [FEATURE-CODE]-AC1 | {path} | {function} | ` ` |
-| [FEATURE-CODE]-AC2 | {path} | {function} | ` ` |
-| [FEATURE-CODE]-AC3 | {path} | {function} | ` ` |
+| Criterion | Test File | Test Function(s) | Task Reference |
+|-----------|-----------|------------------|----------------|
+| [FEATURE-CODE]-AC1 | {path} | {function} | Task {task_id} |
+| [FEATURE-CODE]-AC2 | {path} | {function} | Task {task_id} |
+| [FEATURE-CODE]-AC3 | {path} | {function} | Task {task_id} |
 
-**Status Legend**:
-- ` ` — Not started
-- `In Progress` — Tests being written
-- `Written` — Tests exist but may not pass
-- `Passing` — All tests for this criterion pass
+**Note**: Status is tracked in IMPLEMENTATION_PLAN.md to avoid duplication.
 
 ## Test Data
 
