@@ -26,6 +26,7 @@ This skill creates four files in `docs/arch/`:
 | IMPLEMENTATION_PLAN.md | Tasks with traceability to acceptance criteria |
 | INDEX.md | Quick navigation for Ralph Loop |
 | TESTS.md | Test specification with code examples |
+| PROJECT_STRUCTURE.md | Target directory layout and conventions |
 | INFRASTRUCTURE.md | Docker compose + test infrastructure (if external services needed) |
 
 ## Templates
@@ -36,6 +37,7 @@ Templates are located at `{CLAUDE_PLUGIN_ROOT}/skills/design/templates/`:
 - `IMPLEMENTATION_PLAN.md.template`
 - `INDEX.md.template`
 - `TESTS.md.template`
+- `PROJECT_STRUCTURE.md.template`
 - `INFRASTRUCTURE.md.template`
 
 Read templates before generating files.
@@ -229,7 +231,26 @@ Record:
 - Prefer `-alpine` or `-slim` variants
 - Pin specific versions (e.g., `golang:1.23-alpine`, NOT `golang:latest`)
 
-#### 2.5 Synthesize Findings
+#### 2.5 Project Structure Research
+
+Search for:
+- "[stack] project structure best practices 2025"
+- "[framework] recommended folder layout"
+- "[stack] clean architecture project structure"
+
+If research yields results:
+- Extract directory conventions
+- Note file naming patterns
+- Identify required config files
+
+If no useful results found, use stack defaults:
+- **Go**: `cmd/`, `internal/`, `pkg/`, `test/`
+- **Python**: `src/{project}/`, `tests/`
+- **Node.js/TypeScript**: `src/`, `lib/`, `tests/`, `dist/`
+- **Rust**: `src/`, `tests/`, `benches/`
+- **.NET**: `src/{Project}/`, `tests/{Project}.Tests/`
+
+#### 2.6 Synthesize Findings
 
 Add **Research Summary** section to ARCHITECTURE.md (after Vision, before Boundaries):
 
@@ -262,7 +283,12 @@ Read templates from `{CLAUDE_PLUGIN_ROOT}/skills/design/templates/` then create 
 3. **IMPLEMENTATION_PLAN.md** - Use `IMPLEMENTATION_PLAN.md.template`
 4. **INDEX.md** - Use `INDEX.md.template`
 5. **TESTS.md** - Use `TESTS.md.template` (always generate)
-6. **INFRASTRUCTURE.md** - Use `INFRASTRUCTURE.md.template` (only if external services selected in Q6)
+6. **PROJECT_STRUCTURE.md** - Use `PROJECT_STRUCTURE.md.template`:
+   - Map each module from ARCHITECTURE.md to directory path
+   - Apply research findings OR stack defaults from Step 2.5
+   - Include all config files from INFRASTRUCTURE.md
+   - Ensure test layout matches TESTS.md
+7. **INFRASTRUCTURE.md** - Use `INFRASTRUCTURE.md.template` (only if external services selected in Q6)
 
 **IMPORTANT**: All diagrams MUST use Mermaid format. Never use ASCII art or PlantUML.
 
@@ -321,6 +347,7 @@ Files:
 - IMPLEMENTATION_PLAN.md ([K] lines)
 - INDEX.md ([L] lines)
 - TESTS.md ([T] lines)
+- PROJECT_STRUCTURE.md ([P] lines)
 - INFRASTRUCTURE.md ([I] lines) — if external services needed
 
 Metrics:

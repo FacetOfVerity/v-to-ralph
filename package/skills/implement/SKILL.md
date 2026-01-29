@@ -61,6 +61,7 @@ docs/arch/
 ├── INDEX.md               # START HERE - task navigation
 ├── ARCHITECTURE.md        # Criteria, modules, ubiquitous language
 ├── DIAGRAMS.md            # Sequence diagrams for complex flows
+├── PROJECT_STRUCTURE.md   # Directory layout (consult before creating files)
 └── IMPLEMENTATION_PLAN.md # MEMORY - progress persists here
 ```
 
@@ -84,6 +85,10 @@ docs/arch/
 2. Set task's criterion Status=`In Progress` in Traceability Matrix
 3. Read task's acceptance criteria in ARCHITECTURE.md
 4. If complex flow → check DIAGRAMS.md for sequence diagram
+4.5. Before creating new files, check PROJECT_STRUCTURE.md for:
+   - Correct directory path for the module
+   - File naming convention
+   - Required accompanying files (tests, etc.)
 5. Write comprehensive failing tests (RED)
 6. Implement production-ready code (GOLD)
 7. [build_cmd] && [test_cmd]

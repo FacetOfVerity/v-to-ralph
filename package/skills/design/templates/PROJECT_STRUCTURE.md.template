@@ -1,0 +1,78 @@
+# Project Structure
+
+## Overview
+
+Target directory layout following {stack} best practices.
+
+{research_summary_if_applicable}
+
+## Directory Layout
+
+```
+{project_name}/
+├── {source_dir}/           # {source_description}
+│   ├── {module1}/
+│   │   ├── {typical_files}
+│   │   └── ...
+│   └── {module2}/
+├── {test_dir}/             # Test files
+│   ├── unit/
+│   └── integration/
+├── docs/arch/              # Architecture documentation
+├── {config_files}          # Configuration
+└── README.md
+```
+
+## Module Mapping
+
+Maps modules from [ARCHITECTURE.md](./ARCHITECTURE.md) to directories.
+
+| Module | Directory | Key Files | Responsibility |
+|--------|-----------|-----------|----------------|
+| {Module1} | {path} | {files} | {from ARCHITECTURE.md} |
+| {Module2} | {path} | {files} | {from ARCHITECTURE.md} |
+
+## Entry Points
+
+| Purpose | Path | Function/Export |
+|---------|------|-----------------|
+| {Main} | {path} | {entry_function} |
+| {CLI} | {path} | {entry_function} |
+
+## Test Layout
+
+| Type | Location | Naming Convention | Run Command |
+|------|----------|-------------------|-------------|
+| Unit | {unit_dir} | {naming} | {command} |
+| Integration | {int_dir} | {naming} | {command} |
+
+## File Naming Conventions
+
+| Entity | Convention | Example |
+|--------|------------|---------|
+| Source files | {convention} | {example} |
+| Test files | {convention} | {example} |
+| Config files | {convention} | {example} |
+
+## Configuration Files
+
+| File | Purpose | Required |
+|------|---------|----------|
+| {config1} | {purpose} | Yes |
+| {config2} | {purpose} | Optional |
+
+## Dependencies Structure
+
+### Internal Dependencies
+
+{module dependency graph or list}
+
+### External Dependencies
+
+| Package | Version | Purpose |
+|---------|---------|---------|
+| {pkg} | {version} | {purpose} |
+
+## Stack-Specific Notes
+
+{Any stack-specific conventions, gotchas, or best practices discovered during research}

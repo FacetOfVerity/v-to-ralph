@@ -10,6 +10,7 @@ Quick reference for navigating architecture documents.
 | [DIAGRAMS.md](./DIAGRAMS.md) | Sequence diagrams | Understanding complex flows |
 | [IMPLEMENTATION_PLAN.md](./IMPLEMENTATION_PLAN.md) | Task checklist | Finding next task, marking done |
 | [TESTS.md](./TESTS.md) | Test specifications & code examples | Writing tests for current AC |
+| [PROJECT_STRUCTURE.md](./PROJECT_STRUCTURE.md) | Directory layout & conventions | Before creating new files |
 | [INFRASTRUCTURE.md](./INFRASTRUCTURE.md) | Docker compose & test services | Setting up test environment |
 
 ## Domain Terms
