@@ -146,6 +146,39 @@ When ALL tasks marked `[x]` AND all tests pass:
 <promise>PROJECT COMPLETE</promise>
 ```
 
+## Deliverable Requirement
+
+**CRITICAL**: Before emitting `PROJECT COMPLETE`, the project MUST satisfy ALL conditions:
+
+1. **Fully Buildable**
+   - `{build_cmd}` passes without errors
+   - All dependencies resolved
+   - No compilation warnings (if applicable)
+
+2. **Fully Tested**
+   - ALL tests pass (unit + integration)
+   - No skipped tests
+   - Coverage meets target from TESTS.md (if specified)
+
+3. **All Acceptance Criteria Covered**
+   - Every AC from ARCHITECTURE.md has passing tests
+   - Traceability Matrix in IMPLEMENTATION_PLAN.md shows all `Tested`
+
+4. **Infrastructure Working** (if applicable)
+   - `docker build .` completes without errors
+   - `docker-compose up -d` starts full stack
+   - All containers show "healthy" status
+   - `curl localhost:{port}/healthz` returns 200 with all checks "ok"
+   - This is the **final verification** — if `/healthz` passes, the stack works
+
+5. **Production Ready**
+   - No TODO comments left unresolved
+   - No debug code (console.log, print statements for debugging)
+   - Code follows project conventions
+   - Clean git history with meaningful commits
+
+**Do NOT emit PROJECT COMPLETE until ALL above conditions are verified.**
+
 ## Anti-Patterns
 
 - Reading full ARCHITECTURE.md every iteration (use INDEX.md)
@@ -153,6 +186,8 @@ When ALL tasks marked `[x]` AND all tests pass:
 - Leaving tests red between commits
 - Skipping acceptance criteria
 - Marking task done before tests pass
+- Emitting PROJECT COMPLETE with failing tests
+- Leaving `:latest` Docker image tags
 ```
 
 ### Step 4: Stack-Specific Configuration

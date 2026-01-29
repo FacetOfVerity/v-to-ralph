@@ -25,6 +25,8 @@ This skill creates four files in `docs/arch/`:
 | DIAGRAMS.md | Sequence diagrams (happy path + complex scenarios) + Class diagrams |
 | IMPLEMENTATION_PLAN.md | Tasks with traceability to acceptance criteria |
 | INDEX.md | Quick navigation for Ralph Loop |
+| TESTS.md | Test specification with code examples |
+| INFRASTRUCTURE.md | Docker compose + test infrastructure (if external services needed) |
 
 ## Templates
 
@@ -33,6 +35,8 @@ Templates are located at `{CLAUDE_PLUGIN_ROOT}/skills/design/templates/`:
 - `DIAGRAMS.md.template`
 - `IMPLEMENTATION_PLAN.md.template`
 - `INDEX.md.template`
+- `TESTS.md.template`
+- `INFRASTRUCTURE.md.template`
 
 Read templates before generating files.
 
@@ -91,20 +95,47 @@ Q3 - "Research": Should I research current best practices?
   Options:
   - Yes, research first (recommended for unfamiliar domains)
   - Skip research (use existing knowledge)
+
+Q4 - "Test Framework": Which test framework? (default shown based on stack)
+  Options (vary by Q1 selection):
+  - Go: `testing` + `testify` (Recommended)
+  - Go: `testing` only (standard library)
+  - Python: `pytest` (Recommended)
+  - Python: `unittest`
+  - Node.js: `vitest` (Recommended)
+  - Node.js: `jest`
+  - Rust: built-in `#[test]` + `tokio-test` (Recommended)
+  - .NET: `xUnit` (Recommended)
+  - .NET: `NUnit`
+
+Q5 - "Integration Tests": How should integration tests run?
+  Options:
+  - Testcontainers (Recommended - per-test isolation, CI-friendly)
+  - Docker Compose scripts (for complex multi-service setups)
+  - No integration tests (unit tests only)
+
+Q6 - "External Services": Does this project need external services for testing?
+  Options:
+  - Yes, database (PostgreSQL, MySQL, etc.)
+  - Yes, cache (Redis, Memcached)
+  - Yes, message queue (RabbitMQ, Kafka)
+  - Yes, multiple services (will ask details)
+  - No external services needed
+  (multiSelect: true)
 ```
 
 **Second question block** (conditional):
 
 If Q3 = "Yes, research first", ask separately:
 ```
-Q4 - "Search Tool": Which search tool to use?
+Q7 - "Search Tool": Which search tool to use?
   Options: [List available search tools from MCP servers or built-in WebSearch]
 ```
 
 **Third question block** (always ask):
 
 ```
-Q5 - "Constraints": Any specific constraints?
+Q8 - "Constraints": Any specific constraints?
   Description: "Performance requirements, integrations, compliance, existing systems..."
   (free text input)
 ```
@@ -157,7 +188,48 @@ If project has specific domain (fintech, healthcare, IoT):
 - Compliance requirements
 - Industry examples
 
-#### 2.4 Synthesize Findings
+#### 2.4 Infrastructure Research (if external services needed)
+
+If user selected external services in Q6, search for current Docker images:
+
+```
+Search queries:
+- Database: "{database_type} docker image latest stable version {current_year}"
+- Cache: "redis docker image latest stable {current_year}"
+- Message queue: "rabbitmq docker image official {current_year}"
+```
+
+**Important**:
+- Record exact image tags with versions (e.g., `postgres:16.4-alpine`)
+- NEVER use `:latest` tag — pin specific versions for reproducibility
+- Prefer `-alpine` variants when available (smaller images)
+- Note health check commands for each service
+
+Example search results to record:
+```
+| Service | Image | Health Check |
+|---------|-------|--------------|
+| PostgreSQL | postgres:16.4-alpine | pg_isready -U postgres |
+| Redis | redis:7.4-alpine | redis-cli ping |
+| RabbitMQ | rabbitmq:3.13-management-alpine | rabbitmq-diagnostics check_running |
+```
+
+#### Application Base Image Research
+
+Search for current base Docker images for the selected stack:
+- Go: "golang docker image latest stable version {current_year}"
+- Python: "python docker image slim latest {current_year}"
+- Node.js: "node docker image alpine LTS {current_year}"
+- Rust: "rust docker official image {current_year}"
+- .NET: "dotnet sdk aspnet docker image {current_year}"
+
+Record:
+- Build stage image (with SDK/compiler)
+- Runtime stage image (minimal, for production)
+- Prefer `-alpine` or `-slim` variants
+- Pin specific versions (e.g., `golang:1.23-alpine`, NOT `golang:latest`)
+
+#### 2.5 Synthesize Findings
 
 Add **Research Summary** section to ARCHITECTURE.md (after Vision, before Boundaries):
 
@@ -189,8 +261,22 @@ Read templates from `{CLAUDE_PLUGIN_ROOT}/skills/design/templates/` then create 
 2. **DIAGRAMS.md** - Use `DIAGRAMS.md.template`
 3. **IMPLEMENTATION_PLAN.md** - Use `IMPLEMENTATION_PLAN.md.template`
 4. **INDEX.md** - Use `INDEX.md.template`
+5. **TESTS.md** - Use `TESTS.md.template` (always generate)
+6. **INFRASTRUCTURE.md** - Use `INFRASTRUCTURE.md.template` (only if external services selected in Q6)
 
 **IMPORTANT**: All diagrams MUST use Mermaid format. Never use ASCII art or PlantUML.
+
+**TESTS.md requirements**:
+- Include test code examples for EACH acceptance criterion
+- Map chosen test framework from Q4
+- Include actual commands based on selected stack
+- Coverage matrix must list ALL acceptance criteria
+
+**INFRASTRUCTURE.md requirements** (if generated):
+- Use pinned image versions from Step 2.4 research (NEVER `:latest`)
+- Include health check commands for each service
+- Provide both Docker Compose config and Testcontainers code example
+- Include connection string templates
 
 ### Step 4: Validate
 
@@ -208,6 +294,18 @@ Before presenting to user, verify quality:
 - [ ] THEN clauses use passive voice (observable outcomes)
 - [ ] Each module has single responsibility
 
+**Test specification checks (TESTS.md):**
+- [ ] Every AC has corresponding test specification with code example
+- [ ] Test stack matches selected technology stack from Q1/Q4
+- [ ] All commands are valid for the selected framework
+- [ ] Coverage matrix lists ALL acceptance criteria
+
+**Infrastructure checks (INFRASTRUCTURE.md, if generated):**
+- [ ] All Docker images have pinned versions (no `:latest`)
+- [ ] Health checks defined for every service
+- [ ] Connection strings documented
+- [ ] Startup/shutdown commands complete and correct
+
 If issues found, fix them before proceeding.
 
 ### Step 5: Review
@@ -222,6 +320,8 @@ Files:
 - DIAGRAMS.md ([M] lines)
 - IMPLEMENTATION_PLAN.md ([K] lines)
 - INDEX.md ([L] lines)
+- TESTS.md ([T] lines)
+- INFRASTRUCTURE.md ([I] lines) — if external services needed
 
 Metrics:
 - Domain terms: [X]
@@ -229,8 +329,11 @@ Metrics:
 - Acceptance criteria: [Z]
 - Implementation tasks: [T]
 - Diagrams: [D] sequence + [C] class
+- Test specifications: [S]
+- External services: [E] (or "none")
 
 Traceability: 100% criteria covered
+Test coverage: 100% criteria have test specifications
 
 Q - "Review": How would you like to proceed?
   Options:

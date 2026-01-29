@@ -1,0 +1,315 @@
+# Project Infrastructure
+
+## Overview
+
+{infrastructure_overview}
+
+### Required Services
+
+| Service | Purpose | Required For |
+|---------|---------|--------------|
+| {service_name} | {purpose} | {which_tests_need_it} |
+
+## Docker Compose Configuration
+
+Create this file at project root as `docker-compose.yml`:
+
+```yaml
+# docker-compose.yml
+# Full project deployment: infrastructure + application
+# Use for:
+#   1. Deployment validation (docker-compose up)
+#   2. Integration tests (if not using testcontainers)
+# Start: docker-compose up -d
+# Stop:  docker-compose down -v
+
+services:
+  # === Infrastructure ===
+  {service_name}:
+    image: {image}:{version}  # Pinned version - avoid :latest
+    container_name: {project}_{service}
+    ports:
+      - "{host_port}:{container_port}"
+    environment:
+      - {ENV_VAR}={value}
+    healthcheck:
+      test: {healthcheck_command}
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    volumes:
+      - {volume_name}:{mount_path}
+
+  # === Application ===
+  {app_service_name}:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: {project}_app
+    depends_on:
+      {service_name}:
+        condition: service_healthy
+    ports:
+      - "{app_host_port}:{app_container_port}"
+    environment:
+      - {APP_ENV_VAR}={value}
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:{app_container_port}/healthz"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+volumes:
+  {volume_name}:
+```
+
+## Services
+
+### {Service Name}
+
+| Property | Value |
+|----------|-------|
+| **Image** | `{image}:{version}` |
+| **Purpose** | {why_this_service_is_needed} |
+| **Port** | {host_port}:{container_port} |
+| **Health Check** | `{healthcheck_command}` |
+
+**Environment Variables**:
+
+| Variable | Value | Description |
+|----------|-------|-------------|
+| `{VAR}` | `{value}` | {description} |
+
+**Connection String**:
+```
+{connection_string_template}
+```
+
+---
+
+## Dockerfile
+
+Dockerfile for the application service. Place in project root.
+
+```dockerfile
+# Dockerfile
+# Base image from research (pinned version)
+FROM {base_image}:{version} AS builder
+
+WORKDIR /app
+
+# Copy dependency files
+COPY {dependency_files} .
+
+# Install dependencies
+RUN {install_command}
+
+# Copy source
+COPY . .
+
+# Build
+RUN {build_command}
+
+# === Production stage ===
+FROM {runtime_image}:{version}
+
+WORKDIR /app
+
+COPY --from=builder /app/{binary_or_dist} .
+
+EXPOSE {port}
+
+CMD {run_command}
+```
+
+### Base Image Selection
+
+| Stack | Build Image | Runtime Image |
+|-------|-------------|---------------|
+| Go | `golang:{version}-alpine` | `alpine:{version}` or `scratch` |
+| Python | `python:{version}-slim` | `python:{version}-slim` |
+| Node.js | `node:{version}-alpine` | `node:{version}-alpine` |
+| Rust | `rust:{version}` | `debian:bookworm-slim` or `alpine` |
+| .NET | `mcr.microsoft.com/dotnet/sdk:{version}` | `mcr.microsoft.com/dotnet/aspnet:{version}` |
+
+### Health Endpoint (must be implemented in application code)
+
+Application MUST implement `/healthz` endpoint that verifies ALL infrastructure dependencies:
+
+```
+GET /healthz
+  → 200 OK: all dependencies healthy
+  → 503 Service Unavailable: something failed (with details)
+```
+
+**Response format**:
+```json
+// Success (200)
+{
+  "status": "ok",
+  "checks": {
+    "postgres": "ok",
+    "redis": "ok"
+  }
+}
+
+// Failure (503)
+{
+  "status": "error",
+  "checks": {
+    "postgres": "ok",
+    "redis": "connection refused: dial tcp 127.0.0.1:6379"
+  }
+}
+```
+
+**Implementation example (Go)**:
+```go
+func healthzHandler(w http.ResponseWriter, r *http.Request) {
+    checks := map[string]string{}
+    healthy := true
+
+    // Check database
+    if err := db.PingContext(r.Context()); err != nil {
+        checks["postgres"] = err.Error()
+        healthy = false
+    } else {
+        checks["postgres"] = "ok"
+    }
+
+    // Check Redis (if used)
+    if err := redis.Ping(r.Context()).Err(); err != nil {
+        checks["redis"] = err.Error()
+        healthy = false
+    } else {
+        checks["redis"] = "ok"
+    }
+
+    status := "ok"
+    code := http.StatusOK
+    if !healthy {
+        status = "error"
+        code = http.StatusServiceUnavailable
+    }
+
+    w.Header().Set("Content-Type", "application/json")
+    w.WriteHeader(code)
+    json.NewEncoder(w).Encode(map[string]any{
+        "status": status,
+        "checks": checks,
+    })
+}
+```
+
+**This endpoint is the final verification** — if `/healthz` returns 200, the entire stack is working.
+
+**Note**: `wget` in docker healthcheck (available in alpine). For `scratch` — add static binary or use TCP.
+
+---
+
+## Startup Commands
+
+```bash
+# Start test infrastructure
+docker-compose up -d
+
+# Wait for all services to be healthy
+docker-compose ps
+# Verify STATUS shows "healthy" for all services
+
+# View logs if troubleshooting
+docker-compose logs -f
+
+# Stop and remove volumes (clean state)
+docker-compose down -v
+```
+
+### Health Check Script
+
+```bash
+#!/bin/bash
+# scripts/wait-for-infra.sh
+# Wait for test infrastructure to be ready
+
+set -e
+
+echo "Waiting for test infrastructure..."
+
+# Wait for {service}
+until docker-compose exec -T {service} {health_check_command} 2>/dev/null; do
+  echo "Waiting for {service}..."
+  sleep 2
+done
+
+echo "Test infrastructure ready!"
+```
+
+## Testcontainers Alternative
+
+If using Testcontainers instead of Docker Compose, use this pattern:
+
+```{language}
+{testcontainers_code_example}
+```
+
+### Testcontainers vs Docker Compose Decision
+
+| Factor | Testcontainers | Docker Compose |
+|--------|---------------|----------------|
+| Test isolation | Per-test containers | Shared containers |
+| Startup time | Slower (per test) | Faster (once) |
+| CI/CD | Built-in support | Requires setup |
+| Local dev | Auto-managed | Manual start/stop |
+| Multi-service | Possible but complex | Natural fit |
+
+**Recommendation**: {recommendation_based_on_project}
+
+## Network Configuration
+
+For tests that need to connect to containerized services:
+
+| Environment | Host | Port |
+|-------------|------|------|
+| Local (Docker Compose) | `localhost` | {host_port} |
+| CI (Testcontainers) | Dynamic | Dynamic |
+| CI (Docker Compose) | `{service_name}` | {container_port} |
+
+## Data Persistence
+
+### Between Test Runs
+
+{data_persistence_strategy}
+
+### Cleanup Strategy
+
+```bash
+# Full cleanup (removes all data)
+docker-compose down -v
+
+# Soft cleanup (keeps volumes)
+docker-compose down
+```
+
+## Troubleshooting
+
+### Common Issues
+
+**Container won't start**:
+```bash
+# Check logs
+docker-compose logs {service}
+
+# Check port conflicts
+lsof -i :{host_port}
+```
+
+**Connection refused**:
+- Ensure containers are healthy: `docker-compose ps`
+- Verify correct host/port for your environment
+- Check firewall/network settings
+
+**Tests flaky with containers**:
+- Add proper health checks with retries
+- Use wait-for scripts before running tests
+- Increase container resource limits if needed

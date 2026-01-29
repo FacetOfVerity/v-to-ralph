@@ -8,17 +8,39 @@ Tasks with traceability to [Acceptance Criteria](./ARCHITECTURE.md#acceptance-cr
 
 | Phase | Tasks | Criteria Covered |
 |-------|-------|------------------|
+| 0. Test Infrastructure | 3 | Test setup |
 | 1. Foundation | 2 | Setup |
 | 2. Core | 3 | [FEATURE-CODE]-AC1..AC4 |
 | 3. Integration | 2 | [FEATURE-CODE-2]-AC1..AC2 |
-| **Total** | **7** | **All criteria** |
+| **Total** | **10** | **All criteria** |
+
+## Phase 0: Test Infrastructure Setup
+
+- [ ] **Task 0.1**: Configure test framework
+  - [ ] Subtask: Install test dependencies ({test_framework}, {assertion_lib})
+  - [ ] Subtask: Create test directory structure
+  - [ ] Subtask: Verify `{test_command}` runs (even with 0 tests)
+  - Covers: Test infrastructure
+
+- [ ] **Task 0.2**: Setup deployment infrastructure (if external services needed)
+  - [ ] Subtask: Create `Dockerfile` from INFRASTRUCTURE.md template
+  - [ ] Subtask: Create `docker-compose.yml` from INFRASTRUCTURE.md
+  - [ ] Subtask: Implement `/healthz` endpoint (checks DB, cache, etc. — see INFRASTRUCTURE.md)
+  - [ ] Subtask: `docker-compose up -d` — all containers start
+  - [ ] Subtask: `curl localhost:{port}/healthz` returns 200 with all checks "ok"
+  - Covers: Deployment infrastructure
+
+- [ ] **Task 0.3**: Verify test environment
+  - [ ] Subtask: Write minimal connectivity test (e.g., DB ping)
+  - [ ] Subtask: Run test with infrastructure running
+  - [ ] Subtask: Verify teardown works (`docker-compose down -v`)
+  - Covers: Test infrastructure
 
 ## Phase 1: Foundation
 
 - [ ] **Task 1.1**: [Setup description]
   - [ ] Subtask: Initialize project structure
   - [ ] Subtask: Configure build tools
-  - [ ] Subtask: Setup test infrastructure
   - Covers: Infrastructure (no AC)
 
 - [ ] **Task 1.2**: [Another setup task]

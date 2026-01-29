@@ -9,6 +9,8 @@ Quick reference for navigating architecture documents.
 | [ARCHITECTURE.md](./ARCHITECTURE.md) | Design & acceptance criteria | Current task's criteria |
 | [DIAGRAMS.md](./DIAGRAMS.md) | Sequence diagrams | Understanding complex flows |
 | [IMPLEMENTATION_PLAN.md](./IMPLEMENTATION_PLAN.md) | Task checklist | Finding next task, marking done |
+| [TESTS.md](./TESTS.md) | Test specifications & code examples | Writing tests for current AC |
+| [INFRASTRUCTURE.md](./INFRASTRUCTURE.md) | Docker compose & test services | Setting up test environment |
 
 ## Domain Terms
 
@@ -34,9 +36,27 @@ Quick reference from [Ubiquitous Language](./ARCHITECTURE.md#ubiquitous-language
 | Task 2.1 | [CODE]-AC1, AC2 | [CODE]-HP1 |
 | Task 2.2 | [CODE]-AC3 | [CODE]-CS1 |
 
+## Test Infrastructure Summary
+
+| Component | Details |
+|-----------|---------|
+| Test Framework | {test_framework} |
+| Integration Approach | {testcontainers \| docker-compose} |
+| External Services | {service_list or "None"} |
+
+Quick start:
+```bash
+# Start test infrastructure (if applicable)
+{infrastructure_start_command}
+
+# Run all tests
+{test_all_command}
+```
+
 ## Progress
 
 - **Total Tasks**: [T]
 - **Completed**: 0
 - **Acceptance Criteria**: [P]
 - **Covered**: [P] (100%)
+- **Test Specifications**: [S]

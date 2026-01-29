@@ -1,0 +1,159 @@
+# Test Specification
+
+## Testing Philosophy
+
+**GS-TDD (Gold Standard TDD)**: Tests define the gold standard for acceptance. Code must pass ALL tests completely — not just "make tests green" with minimal effort.
+
+- **RED**: Write comprehensive tests covering ALL acceptance criteria BEFORE implementation
+- **GOLD**: Write production-ready code from the start (proper error handling, clean structure)
+- **REFACTOR**: Only if needed, tests must stay green
+
+Tests are persistent memory — they encode requirements that survive across development iterations.
+
+## Test Stack
+
+| Category | Tool | Version | Purpose |
+|----------|------|---------|---------|
+| Framework | {test_framework} | {version} | Test runner |
+| Assertions | {assertion_lib} | {version} | Fluent assertions |
+| Mocking | {mock_lib} | {version} | Test doubles |
+| Coverage | {coverage_tool} | {version} | Coverage reports |
+
+### Installation
+
+```{language}
+{install_commands}
+```
+
+## Integration Test Approach
+
+**Strategy**: {testcontainers | docker-compose}
+
+{strategy_description}
+
+### When to Use Each
+
+| Approach | Use When |
+|----------|----------|
+| Testcontainers | Single service, need isolation per test, CI/CD pipelines |
+| Docker Compose | Multiple services, complex orchestration, shared state between tests |
+
+## Test Categories
+
+### Unit Tests
+
+- **Location**: `{unit_test_dir}`
+- **Naming**: `{unit_test_naming_convention}`
+- **Coverage target**: {coverage_target}%
+- **Characteristics**:
+  - No external dependencies (DB, network, filesystem)
+  - Fast execution (<100ms per test)
+  - Isolated — tests don't affect each other
+
+### Integration Tests
+
+- **Location**: `{integration_test_dir}`
+- **Naming**: `{integration_test_naming_convention}`
+- **Prerequisites**: {prerequisites}
+- **Characteristics**:
+  - Real external dependencies (via containers)
+  - Tests component interactions
+  - May have setup/teardown overhead
+
+### E2E Tests (if applicable)
+
+- **Location**: `{e2e_test_dir}`
+- **Naming**: `{e2e_test_naming_convention}`
+- **Prerequisites**: Full system running
+- **Characteristics**:
+  - Tests complete user flows
+  - Slowest to execute
+  - Most realistic validation
+
+## Test Specifications
+
+Each acceptance criterion maps to one or more test specifications.
+
+### [FEATURE-CODE]-AC1: {Criterion Title}
+
+**File**: `{test_file_path}`
+**Function**: `{test_function_name}`
+
+```{language}
+{test_code_example}
+```
+
+**Covers**:
+- Happy path: {happy_path_description}
+- Edge cases: {edge_cases}
+- Error conditions: {error_conditions}
+
+---
+
+### [FEATURE-CODE]-AC2: {Another Criterion Title}
+
+**File**: `{test_file_path}`
+**Function**: `{test_function_name}`
+
+```{language}
+{test_code_example}
+```
+
+## Acceptance Criteria Coverage Matrix
+
+| Criterion | Test File | Test Function(s) | Status |
+|-----------|-----------|------------------|--------|
+| [FEATURE-CODE]-AC1 | {path} | {function} | ` ` |
+| [FEATURE-CODE]-AC2 | {path} | {function} | ` ` |
+| [FEATURE-CODE]-AC3 | {path} | {function} | ` ` |
+
+**Status Legend**:
+- ` ` — Not started
+- `In Progress` — Tests being written
+- `Written` — Tests exist but may not pass
+- `Passing` — All tests for this criterion pass
+
+## Test Data
+
+### Fixtures
+
+```{language}
+{fixture_examples}
+```
+
+### Test Database Seeding
+
+{database_seeding_approach}
+
+## Commands
+
+| Action | Command |
+|--------|---------|
+| Run all tests | `{test_all_cmd}` |
+| Run unit tests | `{test_unit_cmd}` |
+| Run integration tests | `{test_integration_cmd}` |
+| Run specific test | `{test_specific_cmd}` |
+| Coverage report | `{coverage_cmd}` |
+| Watch mode | `{watch_cmd}` |
+
+### CI Pipeline Commands
+
+```bash
+# Full test suite for CI
+{ci_test_command}
+```
+
+## Test Environment Variables
+
+| Variable | Purpose | Example |
+|----------|---------|---------|
+| {VAR_NAME} | {purpose} | {example_value} |
+
+## Anti-Patterns to Avoid
+
+- Writing tests after implementation (defeats GS-TDD)
+- Testing implementation details instead of behavior
+- Shared mutable state between tests
+- Ignoring flaky tests
+- Skipping tests to make CI pass
+- Testing only happy paths
