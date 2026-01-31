@@ -311,7 +311,7 @@ Search for implementation patterns:
 - Configuration management
 - Security best practices
 
-**Fallback**: Use standard patterns for the stack (documented in step 2.6).
+**Fallback**: Use standard patterns for the stack (documented in step 2.7).
 
 #### 2.4 Domain-Specific Research (if applicable)
 
@@ -361,7 +361,27 @@ Record:
 - Prefer `-alpine` or `-slim` variants
 - Pin specific versions (e.g., `golang:1.23-alpine`, NOT `golang:latest`)
 
-#### 2.6 Project Structure Research
+#### 2.6 External Dependencies Research
+
+Search for current versions of project dependencies:
+- "{package_name} latest stable version $CURRENT_YEAR"
+- "{framework} recommended packages $CURRENT_YEAR"
+
+**Version Requirements**:
+- Use **exact versions** (e.g., `1.2.3`), NOT ranges (`^1.2.3`, `>=1.0`, `~1.2`)
+- Use **current stable/LTS versions** at the time of design
+- For security-critical packages, prefer versions with recent security patches
+
+**Stack-specific version queries**:
+| Stack | Package Manager | Version Query Example |
+|-------|-----------------|----------------------|
+| Go | go.mod | "testify latest version $CURRENT_YEAR" |
+| Python | pyproject.toml | "fastapi latest version $CURRENT_YEAR" |
+| Node.js | package.json | "express latest version $CURRENT_YEAR" |
+| Rust | Cargo.toml | "tokio latest version $CURRENT_YEAR" |
+| .NET | .csproj | "serilog latest version $CURRENT_YEAR" |
+
+#### 2.7 Project Structure Research
 
 Search for:
 - "[stack] project structure best practices $CURRENT_YEAR"
@@ -380,7 +400,7 @@ If no useful results found, use stack defaults:
 - **Rust**: `src/`, `tests/`, `benches/`
 - **.NET**: `src/{Project}/`, `tests/{Project}.Tests/`
 
-#### 2.7 Synthesize Findings
+#### 2.8 Synthesize Findings
 
 Add **Research Summary** section to ARCHITECTURE.md (after Vision, before Boundaries):
 
@@ -404,7 +424,7 @@ Add **Research Summary** section to ARCHITECTURE.md (after Vision, before Bounda
 - [URL 2] - [What was useful]
 ```
 
-#### 2.8 Preview Output Structure
+#### 2.9 Preview Output Structure
 
 Before generating files, show user preview:
 
@@ -442,9 +462,10 @@ Read templates from `{CLAUDE_PLUGIN_ROOT}/skills/design/templates/` then create 
 5. **TESTS.md** - Use `TESTS.md.template` (always generate)
 6. **PROJECT_STRUCTURE.md** - Use `PROJECT_STRUCTURE.md.template`:
    - Map each module from ARCHITECTURE.md to directory path
-   - Apply research findings OR stack defaults from Step 2.5
+   - Apply research findings OR stack defaults from Step 2.7
    - Include all config files from INFRASTRUCTURE.md
    - Ensure test layout matches TESTS.md
+   - **External Dependencies: specify exact versions (e.g., `1.2.3`), NEVER use version ranges (`^1.2.3`, `~1.2`, `>=1.0`) or `latest`**
 7. **INFRASTRUCTURE.md** - Use `INFRASTRUCTURE.md.template` (only if external services selected in Q6)
 
 **IMPORTANT**: All diagrams MUST use Mermaid format. Never use ASCII art or PlantUML.
@@ -488,6 +509,11 @@ Before presenting to user, verify quality:
 - [ ] Health checks defined for every service
 - [ ] Connection strings documented
 - [ ] Startup/shutdown commands complete and correct
+
+**Dependencies version checks (PROJECT_STRUCTURE.md):**
+- [ ] All external dependencies have exact versions (e.g., `1.2.3`)
+- [ ] No version ranges (`^`, `~`, `>=`, `>`) or `latest` in dependencies
+- [ ] Versions are current stable/LTS (researched in Step 2.6)
 
 **Placeholder check:**
 - [ ] Scan all generated files for unreplaced placeholders matching `{[a-z_]+}`
