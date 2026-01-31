@@ -62,6 +62,12 @@ Templates are located at `{CLAUDE_PLUGIN_ROOT}/skills/design/templates/`:
 
 Read templates before generating files.
 
+## Current Context
+
+`$CURRENT_YEAR`: !`date +%Y`
+
+Use `$CURRENT_YEAR` value in ALL search queries. NEVER hardcode years like "2024" or "2025".
+
 ## Execution Flow
 
 ### Step 0: Explore Project
@@ -97,7 +103,7 @@ Use `AskUserQuestion` to gather all needed information. Questions are organized 
 
 ## Stack-Framework Compatibility
 
-Use this matrix to validate Q4 options based on Q1 selection:
+Fallback reference when research yields no results:
 
 | Stack | Valid Test Frameworks | Default |
 |-------|----------------------|---------|
@@ -109,11 +115,15 @@ Use this matrix to validate Q4 options based on Q1 selection:
 | Kotlin | JUnit 5, Kotest | Kotest |
 | .NET | xUnit, NUnit | xUnit |
 
-**Note**: Q4 options are filtered based on Q1 selection.
+**IMPORTANT**: This table does NOT include framework versions.
+Always research current LTS/stable versions during Step 2.1.
+Version selection is critical — never assume versions from this table.
+
+**Note**: Used as fallback if research yields no results. Test framework selection happens in Step 2.
 
 ---
 
-**Block A: Core Decisions** (Q1-Q4)
+**Block A: Core Decisions** (Q1-Q3)
 
 ```
 Q1 - "Stack": Which technology stack?
@@ -122,6 +132,7 @@ Q1 - "Stack": Which technology stack?
   - Rust
   - Python
   - Node.js / TypeScript
+  - .NET
 
 Q2 - "Docs Language": Which language for architecture documentation?
   Options (order by detected project language):
@@ -136,26 +147,13 @@ Q3 - "Research": Should I research current best practices?
   - Yes, research first (recommended for unfamiliar domains)
   - Skip research (use existing knowledge)
 
-Q4 - "Test Framework": Which test framework? (default shown based on stack)
-  Options (vary by Q1 selection):
-  - Go: `testing` + `testify` (Recommended)
-  - Go: `testing` only (standard library)
-  - Python: `pytest` (Recommended)
-  - Python: `unittest`
-  - Node.js: `vitest` (Recommended)
-  - Node.js: `jest`
-  - Rust: built-in `#[test]` + `tokio-test` (Recommended)
-  - .NET: `xUnit` (Recommended)
-  - .NET: `NUnit`
-
-**Checkpoint A**: After Q1-Q4, display summary and ask:
+**Checkpoint A**: After Q1-Q3, display summary and ask:
 
 ```
 Current choices:
 - Stack: {Q1 answer}
 - Docs Language: {Q2 answer}
 - Research: {Q3 answer}
-- Test Framework: {Q4 answer}
 
 Review your choices. Want to change anything?
 Options:
@@ -163,16 +161,15 @@ Options:
 - Change Stack
 - Change Docs Language
 - Change Research
-- Change Test Framework
 ```
 
 If user selects a change option, re-ask that specific question then return to checkpoint.
 
 ---
 
-**Block B: Test Configuration** (Q5-Q7)
+**Block B: Test Configuration** (Q4-Q6)
 
-Q5 - "Test Types": Which test types to implement?
+Q4 - "Test Types": Which test types to implement?
   Options:
   - Integration tests only (Recommended for new projects - testcontainers)
   - Unit + Integration tests
@@ -180,13 +177,13 @@ Q5 - "Test Types": Which test types to implement?
   - Unit + Integration + E2E tests
   (multiSelect: false)
 
-Q6 - "Integration Tests": How should integration tests run?
+Q5 - "Integration Tests": How should integration tests run?
   Options:
   - Testcontainers (Recommended - per-test isolation, CI-friendly)
   - Docker Compose scripts (for complex multi-service setups)
-  Note: Only shown if Q5 includes integration tests
+  Note: Only shown if Q4 includes integration tests
 
-Q7 - "External Services": Does this project need external services for testing?
+Q6 - "External Services": Does this project need external services for testing?
   Options:
   - Yes, database (PostgreSQL, MySQL, etc.)
   - Yes, cache (Redis, Memcached)
@@ -195,13 +192,13 @@ Q7 - "External Services": Does this project need external services for testing?
   - No external services needed
   (multiSelect: true)
 
-**Checkpoint B**: After Q5-Q7, display summary and ask:
+**Checkpoint B**: After Q4-Q6, display summary and ask:
 
 ```
 Test configuration:
-- Test Types: {Q5 answer}
-- Integration Approach: {Q6 answer or "N/A"}
-- External Services: {Q7 answer}
+- Test Types: {Q4 answer}
+- Integration Approach: {Q5 answer or "N/A"}
+- External Services: {Q6 answer}
 
 Review your choices. Want to change anything?
 Options:
@@ -219,14 +216,14 @@ If user selects a change option, re-ask that specific question then return to ch
 
 If Q3 = "Yes, research first", ask separately:
 ```
-Q8 - "Search Tool": Which search tool to use?
+Q7 - "Search Tool": Which search tool to use?
   Options: [List available search tools from MCP servers or built-in WebSearch]
 ```
 
 **Third question block** (always ask):
 
 ```
-Q9 - "Constraints": Any specific constraints?
+Q8 - "Constraints": Any specific constraints?
   Description: "Performance requirements, integrations, compliance, existing systems..."
   (free text input)
 ```
@@ -265,13 +262,48 @@ If user requested research, use available search tools to gather information.
 #### 2.1 Framework Discovery
 
 Search for modern frameworks for the selected stack:
-- Best frameworks and libraries
+- "{stack} latest stable version $CURRENT_YEAR"
+- "{stack} LTS version $CURRENT_YEAR" (for stacks with LTS: .NET, Node.js)
+- Best frameworks and libraries for {stack}
 - Project structure conventions
-- Community recommendations
+
+**Version Selection Priority**:
+1. For production projects: Latest LTS/Stable version
+2. For experimental projects: Latest version (ask user if unclear)
+
+**Stack-specific version queries**:
+| Stack | Search Query |
+|-------|--------------|
+| .NET | "dotnet latest LTS version $CURRENT_YEAR" |
+| Node.js | "nodejs LTS version $CURRENT_YEAR" |
+| Go | "go latest stable version $CURRENT_YEAR" |
+| Python | "python latest stable version $CURRENT_YEAR" |
+| Rust | "rust latest stable version $CURRENT_YEAR" |
 
 **Fallback**: Use defaults from Stack-Framework Compatibility table.
 
-#### 2.2 Best Practices Discovery
+#### 2.2 Test Framework Discovery
+
+Search for current test frameworks for the selected stack:
+- "{stack} test framework best practices $CURRENT_YEAR"
+- "{stack} testing library comparison $CURRENT_YEAR"
+
+**Then ask user with AskUserQuestion:**
+
+```
+Q - "Test Framework": Which test framework to use?
+  Options (from research results, max 4):
+  - [Found framework 1] (Recommended if most popular)
+  - [Found framework 2]
+  - [Found framework 3]
+  - Other (specify)
+```
+
+**Fallback**: If research yields no results, use Stack-Framework Compatibility table defaults.
+
+**If user selected "Skip research" in Q3**: Show test framework options directly from Stack-Framework Compatibility table (no search needed).
+
+#### 2.3 Best Practices Discovery
 
 Search for implementation patterns:
 - Error handling approaches
@@ -279,24 +311,24 @@ Search for implementation patterns:
 - Configuration management
 - Security best practices
 
-**Fallback**: Use standard patterns for the stack (documented in step 2.5).
+**Fallback**: Use standard patterns for the stack (documented in step 2.6).
 
-#### 2.3 Domain-Specific Research (if applicable)
+#### 2.4 Domain-Specific Research (if applicable)
 
 If project has specific domain (fintech, healthcare, IoT):
 - Domain architecture patterns
 - Compliance requirements
 - Industry examples
 
-#### 2.4 Infrastructure Research (if external services needed)
+#### 2.5 Infrastructure Research (if external services needed)
 
-If user selected external services in Q6, search for current Docker images:
+If user selected external services in Q6 (External Services), search for current Docker images:
 
 ```
 Search queries:
-- Database: "{database_type} docker image latest stable version {current_year}"
-- Cache: "redis docker image latest stable {current_year}"
-- Message queue: "rabbitmq docker image official {current_year}"
+- Database: "{database_type} docker image latest stable version $CURRENT_YEAR"
+- Cache: "redis docker image latest stable $CURRENT_YEAR"
+- Message queue: "rabbitmq docker image official $CURRENT_YEAR"
 ```
 
 **Important**:
@@ -317,11 +349,11 @@ Example search results to record:
 #### Application Base Image Research
 
 Search for current base Docker images for the selected stack:
-- Go: "golang docker image latest stable version {current_year}"
-- Python: "python docker image slim latest {current_year}"
-- Node.js: "node docker image alpine LTS {current_year}"
-- Rust: "rust docker official image {current_year}"
-- .NET: "dotnet sdk aspnet docker image {current_year}"
+- Go: "golang docker image latest stable version $CURRENT_YEAR"
+- Python: "python docker image slim latest $CURRENT_YEAR"
+- Node.js: "node docker image alpine LTS $CURRENT_YEAR"
+- Rust: "rust docker official image $CURRENT_YEAR"
+- .NET: "dotnet sdk aspnet docker image $CURRENT_YEAR"
 
 Record:
 - Build stage image (with SDK/compiler)
@@ -329,10 +361,10 @@ Record:
 - Prefer `-alpine` or `-slim` variants
 - Pin specific versions (e.g., `golang:1.23-alpine`, NOT `golang:latest`)
 
-#### 2.5 Project Structure Research
+#### 2.6 Project Structure Research
 
 Search for:
-- "[stack] project structure best practices 2025"
+- "[stack] project structure best practices $CURRENT_YEAR"
 - "[framework] recommended folder layout"
 - "[stack] clean architecture project structure"
 
@@ -348,7 +380,7 @@ If no useful results found, use stack defaults:
 - **Rust**: `src/`, `tests/`, `benches/`
 - **.NET**: `src/{Project}/`, `tests/{Project}.Tests/`
 
-#### 2.6 Synthesize Findings
+#### 2.7 Synthesize Findings
 
 Add **Research Summary** section to ARCHITECTURE.md (after Vision, before Boundaries):
 
@@ -372,7 +404,7 @@ Add **Research Summary** section to ARCHITECTURE.md (after Vision, before Bounda
 - [URL 2] - [What was useful]
 ```
 
-#### 2.7 Preview Output Structure
+#### 2.8 Preview Output Structure
 
 Before generating files, show user preview:
 
