@@ -196,8 +196,8 @@ that survives across iterations.
 ### Via FacetOfVerity Marketplace (recommended)
 
 ```
-/plugin marketplace add FacetOfVerity/fov-marketplace
-/plugin install v-to-ralph@fov-marketplace
+/plugin marketplace add FacetOfVerity/skills-marketplace
+/plugin install v-to-ralph@skills-marketplace
 ```
 
 ### Direct
