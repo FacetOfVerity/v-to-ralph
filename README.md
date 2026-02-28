@@ -34,7 +34,7 @@ flowchart LR
 
 ## Installation
 
-### Via FacetOfVerity Marketplace (recommended)
+### Via FacetOfVerity Marketplace
 
 ```
 /plugin marketplace add FacetOfVerity/facetofverity-marketplace
