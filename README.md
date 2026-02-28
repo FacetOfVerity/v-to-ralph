@@ -32,6 +32,15 @@ flowchart LR
 - **Bridge** (`/implement`): Generate execution prompt
 - **Right branch** (`/ralph-loop`): GS-TDD implementation with [Ralph Wiggum loop](https://github.com/anthropics/claude-code/tree/main/plugins/ralph-wiggum)
 
+## Installation
+
+### Via FacetOfVerity Marketplace (recommended)
+
+```
+/plugin marketplace add FacetOfVerity/facetofverity-marketplace
+/plugin install v-to-ralph@facetofverity-marketplace
+```
+
 ## Why V-Model?
 
 The left branch of the V-Model is essentially **waterfall** — detailed upfront design before implementation. For human developers, this is often impractical: requirements change, designs become outdated, and the rigidity slows iteration.
@@ -190,22 +199,6 @@ that survives across iterations.
 - Tests serve as persistent memory across iterations
 - Comprehensive coverage prevents regression
 - No throwaway code that needs rewriting
-
-## Installation
-
-### Via FacetOfVerity Marketplace (recommended)
-
-```
-/plugin marketplace add FacetOfVerity/facetofverity-marketplace
-/plugin install v-to-ralph@facetofverity-marketplace
-```
-
-### Direct
-
-```
-/plugin marketplace add FacetOfVerity/v-to-ralph
-/plugin install v-to-ralph@v-to-ralph
-```
 
 ## Project Structure
 
