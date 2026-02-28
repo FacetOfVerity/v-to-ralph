@@ -41,18 +41,18 @@ V-to-Ralph workflow:
 
 ```
 v-to-ralph/
-├── package/
-│   ├── plugin.json                   # Plugin manifest
-│   └── skills/
-│       ├── design/
-│       │   ├── SKILL.md              # /design implementation
-│       │   └── templates/            # Output file templates
-│       │       ├── ARCHITECTURE.md.template
-│       │       ├── DIAGRAMS.md.template
-│       │       ├── IMPLEMENTATION_PLAN.md.template
-│       │       └── INDEX.md.template
-│       └── implement/
-│           └── SKILL.md              # /implement implementation
+├── .claude-plugin/
+│   └── plugin.json                   # Plugin manifest
+├── skills/
+│   ├── design/
+│   │   ├── SKILL.md                  # /design implementation
+│   │   └── templates/                # Output file templates
+│   │       ├── ARCHITECTURE.md.template
+│   │       ├── DIAGRAMS.md.template
+│   │       ├── IMPLEMENTATION_PLAN.md.template
+│   │       └── INDEX.md.template
+│   └── implement/
+│       └── SKILL.md                  # /implement implementation
 ├── README.md
 └── CLAUDE.md
 ```

@@ -193,28 +193,40 @@ that survives across iterations.
 
 ## Installation
 
-TODO describe
+### Via FacetOfVerity Marketplace (recommended)
+
+```
+/plugin marketplace add FacetOfVerity/claude-plugins
+/plugin install v-to-ralph@claude-plugins
+```
+
+### Direct
+
+```
+/plugin marketplace add FacetOfVerity/v-to-ralph
+/plugin install v-to-ralph@v-to-ralph
+```
 
 ## Project Structure
 
 ```
 v-to-ralph/
-├── package/
-│   ├── plugin.json                   # Plugin manifest
-│   └── skills/
-│       ├── design/
-│       │   ├── SKILL.md              # /design implementation
-│       │   ├── validation-rules.md   # Validation rules for design outputs
-│       │   └── templates/            # Output file templates
-│       │       ├── ARCHITECTURE.md.template
-│       │       ├── DIAGRAMS.md.template
-│       │       ├── IMPLEMENTATION_PLAN.md.template
-│       │       ├── INDEX.md.template
-│       │       ├── INFRASTRUCTURE.md.template
-│       │       ├── PROJECT_STRUCTURE.md.template
-│       │       └── TESTS.md.template
-│       └── implement/
-│           └── SKILL.md              # /implement implementation
+├── .claude-plugin/
+│   └── plugin.json                   # Plugin manifest
+├── skills/
+│   ├── design/
+│   │   ├── SKILL.md                  # /design implementation
+│   │   ├── validation-rules.md       # Validation rules for design outputs
+│   │   └── templates/                # Output file templates
+│   │       ├── ARCHITECTURE.md.template
+│   │       ├── DIAGRAMS.md.template
+│   │       ├── IMPLEMENTATION_PLAN.md.template
+│   │       ├── INDEX.md.template
+│   │       ├── INFRASTRUCTURE.md.template
+│   │       ├── PROJECT_STRUCTURE.md.template
+│   │       └── TESTS.md.template
+│   └── implement/
+│       └── SKILL.md                  # /implement implementation
 ├── README.md
 ├── CLAUDE.md
 └── LICENSE
