@@ -1,7 +1,6 @@
 ---
 name: implement
 description: Generate Ralph Loop execution instructions for GS-TDD implementation.
-user-invokable: true
 ---
 
 # Loop Builder

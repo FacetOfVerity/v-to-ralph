@@ -1,8 +1,6 @@
 ---
 name: design
 description: Design system architecture using V-Model principles with BDD-style acceptance criteria.
-user-invokable: true
-
 ---
 
 # Architect
