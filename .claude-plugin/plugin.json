@@ -1,6 +1,6 @@
 {
   "name": "v-to-ralph",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "V-Model implementation pipeline: architect systems with BDD acceptance criteria, then execute via Ralph Loop with GS-TDD",
   "author": {
     "name": "Vladislav"
